@@ -1,178 +1,123 @@
 # select-json-by-json
 
-A high-performance standalone JSON projection engine for Node.js and modern browsers.
-**Engine v6.0 · Package v1.6.1**
+**Describe the JSON you want. Get exactly that.**
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-blue?style=flat&logo=github)](https://keshavsoft.github.io/select-json-by-json/)
-[![npm](https://img.shields.io/badge/npm-select--json--by--json-red?style=flat&logo=npm)](https://www.npmjs.com/package/select-json-by-json)
+[![Live demo](https://img.shields.io/badge/Live%20demo-GitHub%20Pages-blue?style=flat&logo=github)](https://keshavsoft.github.io/select-json-by-json/)
+[![npm](https://img.shields.io/npm/v/select-json-by-json?style=flat&logo=npm)](https://www.npmjs.com/package/select-json-by-json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
----
+You have a large JSON document and need a handful of fields from it. Instead of writing mapping code, write a **spec**: plain JSON shaped like the result you want. `selectJson` returns a new object or array with only those fields, and never touches your source.
 
-## 🔗 Quick Links
+Engine v6.0 · Package v1.6.1 · Node.js and modern browsers
 
-- 🌐 **Live Demo & Playground**: [https://keshavsoft.github.io/select-json-by-json/](https://keshavsoft.github.io/select-json-by-json/)
-- 📦 **GitHub Repository**: [https://github.com/keshavsoft/select-json-by-json](https://github.com/keshavsoft/select-json-by-json)
-- 🚀 **CDN Bundle (Latest)**: [https://keshavsoft.github.io/select-json-by-json/docs/dist/min.js](https://keshavsoft.github.io/select-json-by-json/docs/dist/min.js)
-- 🚀 **CDN Bundle (v6)**: [https://keshavsoft.github.io/select-json-by-json/docs/dist/v6/min.js](https://keshavsoft.github.io/select-json-by-json/docs/dist/v6/min.js)
-
----
-
-## How It Works
-
-`selectJson(source, spec)` takes two arguments:
-
-| Argument | Role |
-|---|---|
-| `source` (1st) | The **input** JSON — an object or array to project from. **Never mutated.** |
-| `spec` (2nd) | The **projection spec** — a JSON object declaring which fields to keep. |
-
-The result is always a **new object/array** with only the fields declared in the spec. The original `source` is untouched.
+## In 30 seconds
 
 ```js
-const result = selectJson(source, spec);
-// source is never modified — result is a fresh projection
+import { selectJson } from "select-json-by-json";
+
+const source = {
+  DATE: "20260401",
+  VOUCHERNUMBER: "S-1042",
+  PARTYNAME: "Asha Traders",
+  "ALLINVENTORYENTRIES.LIST": [
+    { STOCKITEMNAME: "Widget A", RATE: "120.00", QTY: "10 pcs" },
+    { STOCKITEMNAME: "Widget B", RATE: "80.00", QTY: "5 pcs" }
+  ]
+};
+
+const spec = {
+  DATE: true,
+  VOUCHERNUMBER: true,
+  "ALLINVENTORYENTRIES.LIST": { STOCKITEMNAME: true, RATE: true }
+};
+
+selectJson(source, spec);
+// {
+//   DATE: "20260401",
+//   VOUCHERNUMBER: "S-1042",
+//   "ALLINVENTORYENTRIES.LIST": [
+//     { STOCKITEMNAME: "Widget A", RATE: "120.00" },
+//     { STOCKITEMNAME: "Widget B", RATE: "80.00" }
+//   ]
+// }
 ```
 
-### Spec Rules
+The first argument is the source. The second is the spec. `source` is never mutated.
+
+## The spec
 
 | Spec value | Meaning |
-|---|---|
-| `true` | Keep this field from source as-is |
-| `{ ... }` | Descend into nested object/array with sub-spec |
-| _(absent)_ | Field is excluded from result |
+| ---------- | ------- |
+| `true` | Keep this field from the source as-is. |
+| `{ ... }` | Go inside the nested object or array and apply the sub-spec. |
+| *(absent)* | Leave the field out of the result. |
 
----
+## Install
 
-## 📦 Installation & Usage
-
-### 1. NPX — Copy Engine to Your Project
-
-Copies the highest engine version (`v6`) directly into your project as plain JS files, zero dependencies:
-
-```bash
-# Copies v6 engine to ./select-json-by-json/
-npx select-json-by-json
-
-# Custom destination:
-npx select-json-by-json ./src/lib/engine
-
-# Target a specific version:
-npx select-json-by-json ./lib/engine --version-target=v6
-npx select-json-by-json ./lib/engine --version-target=v5
-
-# Show all options:
-npx select-json-by-json --help
-```
-
-After copying, import directly:
-
-```js
-import { selectJson } from "./select-json-by-json/index.js";
-
-const result = selectJson(source, { DATE: true, VOUCHERNUMBER: true });
-```
-
----
-
-### 2. NPM Package
+**npm**
 
 ```bash
 npm install select-json-by-json
 ```
 
-```javascript
-// Latest engine (v6)
-import { selectJson } from "select-json-by-json";
-
-// Pin a specific engine version:
-import { selectJson } from "select-json-by-json/v6";
+```js
+import { selectJson } from "select-json-by-json";      // latest engine (v6)
+import { selectJson } from "select-json-by-json/v6";   // pin a version
 import { selectJson } from "select-json-by-json/v5";
-
-const result = selectJson(sales, {
-    DATE: true,
-    VOUCHERNUMBER: true,
-    "ALLINVENTORYENTRIES.LIST": {
-        STOCKITEMNAME: true,
-        RATE: true
-    }
-});
 ```
 
----
+**npx: copy the engine into your project** (plain JavaScript, zero dependencies)
 
-### 3. CDN (ES Module — Browser)
+```bash
+npx select-json-by-json                                  # copies v6 to ./select-json-by-json/
+npx select-json-by-json ./src/lib/engine                 # custom destination
+npx select-json-by-json ./lib/engine --version-target=v5 # specific version
+npx select-json-by-json --help                           # all options
+```
+
+```js
+import { selectJson } from "./select-json-by-json/index.js";
+```
+
+**CDN: ES module in the browser**
 
 ```html
 <script type="module">
-    import { selectJson } from "https://keshavsoft.github.io/select-json-by-json/docs/dist/min.js";
-
-    const result = selectJson(sourceData, {
-        DATE: true,
-        VOUCHERNUMBER: true
-    });
-
-    console.log(result);
+  import { selectJson } from "https://keshavsoft.github.io/select-json-by-json/docs/dist/min.js";
+  console.log(selectJson(sourceData, { DATE: true, VOUCHERNUMBER: true }));
 </script>
 ```
 
-Also registered globally as `globalThis.ks["select-json-by-json"]` and `globalThis.ks.selectJson`.
+Also registered globally as `globalThis.ks["select-json-by-json"]` and `globalThis.ks.selectJson`. A pinned bundle lives at `docs/dist/v6/min.js`.
 
-> 🌐 Try it live: [Interactive Playground](https://keshavsoft.github.io/select-json-by-json/)
+## Try it live
 
----
+Tick fields and watch the spec and result update in the [interactive playground](https://keshavsoft.github.io/select-json-by-json/).
 
-## 🧪 Testing
+## Develop
 
-```bash
-# Run the Node.js native test suite
-npm test
-
-# Quick manual tests
-node ./test/v2/index.js
-node ./test/v1/index.js
-```
-
----
-
-## 🛠️ Build Commands
-
-| Command | Description |
-|---|---|
-| `npm run build` | Bundles highest `src/vN` with Vite → `docs/dist/vN/min.js` and `docs/dist/min.js` |
-| `npm test` | Runs Node.js native test suite |
-| `npm start` | Runs the demo in `save.js` |
-
----
-
-## 📁 Project Structure
+| Command | What it does |
+| ------- | ------------ |
+| `npm test` | Runs the Node.js native test suite. |
+| `npm run build` | Bundles the highest `src/vN` with Vite into `docs/dist/vN/min.js` and `docs/dist/min.js`. |
+| `npm start` | Runs the demo in `save.js`. |
 
 ```
 src/
-  index.js              ← re-exports from src/v6 (latest)
-  v5/                   ← previous engine version
-  v6/                   ← current engine (v6.0)
-    02-engine.js
-    03-inspect.js
-    04-project.js
-    05-objectProjector.js
-    06-arrayProjector.js
-    07-selectors.js
-    registerGlobal.js
-    meta.js
-    index.js
-
-bin/
-  cli.js                ← npx CLI — copies highest src/vN to destination
-
-test/
-  v1/                   ← manual test with source.json + spec.json
-  v2/                   ← manual test with updated spec
-
-docs/
-  index.html            ← Live playground (GitHub Pages)
-  dist/
-    min.js              ← latest CDN bundle (v6)
-    v6/min.js           ← versioned CDN bundle
+  index.js        re-exports the latest engine (v6)
+  v5/             previous engine
+  v6/             current engine
+bin/cli.js        the npx CLI
+test/             manual tests with source.json and spec.json
+docs/             playground and CDN bundles
 ```
 
+## Links
+
+- [Live demo and playground](https://keshavsoft.github.io/select-json-by-json/)
+- [npm package](https://www.npmjs.com/package/select-json-by-json)
+- [Source on GitHub](https://github.com/keshavsoft/select-json-by-json)
+
+## License
+
+MIT

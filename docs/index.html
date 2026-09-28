@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>select-json-by-json: describe the JSON you want, get exactly that</title>
+    <meta name="description"
+        content="A standalone JSON projection engine for Node.js and browsers. Write a spec shaped like the result you want; get a new object with only those fields.">
+    <style>
+        :root {
+            --bg: #EDF0F4;
+            --ink: #142033;
+            --mute: #586477;
+            --line: #CBD3DF;
+            --acc: #2450E8;
+            --code: #142033;
+            --codeink: #E6ECF5
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 17px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif
+        }
+
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 1.25rem
+        }
+
+        a {
+            color: var(--acc);
+            text-underline-offset: 3px
+        }
+
+        a:focus-visible,
+        input:focus-visible {
+            outline: 3px solid var(--acc);
+            outline-offset: 3px;
+            border-radius: 4px
+        }
+
+        code,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: .88rem
+        }
+
+        header {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--line)
+        }
+
+        header .wrap {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: baseline
+        }
+
+        .name {
+            font: 700 1rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            color: var(--ink);
+            text-decoration: none
+        }
+
+        nav {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap
+        }
+
+        h1,
+        h2 {
+            font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+            line-height: 1.15;
+            letter-spacing: -.01em
+        }
+
+        h1 {
+            font-size: clamp(2.3rem, 6vw, 4rem);
+            max-width: 15ch;
+            margin: 3.5rem 0 1rem
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin: 0 0 .5rem
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin: 0 0 .5rem
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            max-width: 58ch;
+            color: var(--mute);
+            margin: 0 0 1.5rem
+        }
+
+        .hero {
+            padding-bottom: 3rem
+        }
+
+        section {
+            padding: 3rem 0;
+            border-top: 1px solid var(--line)
+        }
+
+        pre {
+            background: var(--code);
+            color: var(--codeink);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 0;
+            line-height: 1.5
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem
+        }
+
+        .stack,
+        .three {
+            display: grid;
+            gap: 1rem
+        }
+
+        .three {
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        @media(max-width:900px) {
+
+            .grid,
+            .three {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .src {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: .5rem
+        }
+
+        .row {
+            display: flex;
+            gap: .6rem;
+            align-items: baseline;
+            padding: .3rem .5rem;
+            border-left: 3px solid transparent;
+            cursor: pointer
+        }
+
+        .row.on {
+            border-left-color: var(--acc);
+            background: #EEF3FF
+        }
+
+        .row:not(.on) span {
+            opacity: .5;
+            text-decoration: line-through
+        }
+
+        .row input {
+            accent-color: var(--acc);
+            width: 1.05rem;
+            height: 1.05rem;
+            flex: none;
+            translate: 0 3px
+        }
+
+        .kids {
+            margin-left: 1.4rem
+        }
+
+        .par {
+            padding: .3rem .5rem
+        }
+
+        .note {
+            color: var(--mute);
+            font-size: .92rem;
+            margin: .6rem 0 0
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: #fff;
+            border: 1px solid var(--line)
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: .75rem;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top
+        }
+
+        footer {
+            padding: 2rem 0;
+            color: var(--mute);
+            border-top: 1px solid var(--line)
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wrap">
+            <a class="name" href="#">select-json-by-json</a>
+            <nav>
+                <a href="https://keshavsoft.github.io/select-json-by-json/">Playground</a>
+                <a href="https://www.npmjs.com/package/select-json-by-json">npm</a>
+                <a href="https://github.com/keshavsoft/select-json-by-json">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <div class="hero">
+            <h1>Describe the JSON you want. Get exactly that.</h1>
+            <p class="lead">select-json-by-json keeps only the fields your spec names and returns them as a new object
+                or array. The spec is plain JSON shaped like the result you want, and your source is never modified.</p>
+            <pre>npm install select-json-by-json</pre>
+            <p class="note">Engine v6.0, package v1.6.1, MIT licensed. Runs in Node.js and modern browsers.</p>
+        </div>
+
+        <section id="try">
+            <h2>Try it: tick the fields you want</h2>
+            <p class="lead">Each tick adds a field to the spec. The result follows.</p>
+            <div class="grid">
+                <div>
+                    <h3>Source</h3>
+                    <div class="src" id="src"></div>
+                </div>
+                <div>
+                    <h3>Spec</h3>
+                    <pre id="spec"></pre>
+                </div>
+                <div>
+                    <h3>Result</h3>
+                    <pre id="out" aria-live="polite"></pre>
+                </div>
+            </div>
+            <p class="note" id="eng">Running a built-in preview of the same rules.</p>
+        </section>
+
+        <section>
+            <h2>The spec has three rules</h2>
+            <table>
+                <tr>
+                    <th><code>true</code></th>
+                    <td>Keep this field from the source as-is.</td>
+                </tr>
+                <tr>
+                    <th><code>{ ... }</code></th>
+                    <td>Go inside the nested object or array and apply the sub-spec.</td>
+                </tr>
+                <tr>
+                    <th>Absent</th>
+                    <td>Leave the field out of the result.</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Use it</h2>
+            <p class="lead">Pass the source first and the spec second. You always get a fresh projection back.</p>
+            <pre>import { selectJson } from "select-json-by-json";
+
+const result = selectJson(sales, {
+  DATE: true,
+  VOUCHERNUMBER: true,
+  "ALLINVENTORYENTRIES.LIST": {
+    STOCKITEMNAME: true,
+    RATE: true
+  }
+});
+// sales is untouched; result holds only the fields above</pre>
+        </section>
+
+        <section>
+            <h2>Install three ways</h2>
+            <div class="three">
+                <div>
+                    <h3>npm package</h3>
+                    <pre>npm install select-json-by-json
+
+// latest engine
+import { selectJson } from "select-json-by-json";
+// or pin a version
+import { selectJson } from "select-json-by-json/v6";</pre>
+                </div>
+                <div>
+                    <h3>npx: copy the engine</h3>
+                    <pre># copies v6 to ./select-json-by-json/
+npx select-json-by-json
+
+# choose a folder or version
+npx select-json-by-json ./lib/engine \
+  --version-target=v6</pre>
+                    <p class="note">Plain JavaScript files, zero dependencies.</p>
+                </div>
+                <div>
+                    <h3>CDN in the browser</h3>
+                    <pre>&lt;script type="module"&gt;
+import { selectJson } from
+"https://keshavsoft.github.io/select-json-by-json/docs/dist/min.js";
+console.log(selectJson(data, { DATE: true }));
+&lt;/script&gt;</pre>
+                    <p class="note">Also available as <code>globalThis.ks.selectJson</code>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Build and test</h2>
+            <table>
+                <tr>
+                    <th><code>npm test</code></th>
+                    <td>Runs the Node.js native test suite.</td>
+                </tr>
+                <tr>
+                    <th><code>npm run build</code></th>
+                    <td>Bundles the highest <code>src/vN</code> with Vite into <code>docs/dist/vN/min.js</code> and
+                        <code>docs/dist/min.js</code>.</td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <div class="wrap">MIT licensed. Made by <a href="https://github.com/keshavsoft">keshavsoft</a>.</div>
+    </footer>
+
+    <script type="module">
+        const L = "ALLINVENTORYENTRIES.LIST";
+        const src = { DATE: "20260401", VOUCHERNUMBER: "S-1042", PARTYNAME: "Asha Traders", NARRATION: "Monthly supply", [L]: [{ STOCKITEMNAME: "Widget A", RATE: "120.00", QTY: "10 pcs", AMOUNT: "1200.00" }, { STOCKITEMNAME: "Widget B", RATE: "80.00", QTY: "5 pcs", AMOUNT: "400.00" }] };
+        const paths = []; for (const k in src) { if (k === L) for (const f in src[k][0]) paths.push(k + "/" + f); else paths.push(k) }
+        const kept = new Set(["DATE", "VOUCHERNUMBER", L + "/STOCKITEMNAME", L + "/RATE"]);
+        let engine = function p(s, sp) { if (Array.isArray(s)) return s.map(x => p(x, sp)); const o = {}; for (const k in sp) { if (k in s) o[k] = sp[k] === true ? s[k] : p(s[k], sp[k]) } return o };
+        const $ = id => document.getElementById(id);
+        const row = (p, k, v) => `<label class="row"><input type="checkbox" data-p="${p}"><code>${k}</code><span>${v}</span></label>`;
+        $("src").innerHTML = Object.keys(src).map(k => k === L ? `<div class="par"><code>${k}</code> <span class="note">applies to each entry</span></div><div class="kids">${Object.keys(src[k][0]).map(f => row(k + "/" + f, f, src[k][0][f])).join("")}</div>` : row(k, k, src[k])).join("");
+        function sync() {
+            document.querySelectorAll("[data-p]").forEach(i => { i.checked = kept.has(i.dataset.p); i.closest(".row").classList.toggle("on", i.checked) });
+            const sp = {}; for (const p of paths) { if (!kept.has(p)) continue; const [k, f] = p.split("/"); if (f) (sp[k] ??= {})[f] = true; else sp[k] = true }
+            $("spec").textContent = JSON.stringify(sp, null, 2);
+            $("out").textContent = JSON.stringify(engine(src, sp), null, 2);
+        }
+        $("src").addEventListener("change", e => { const p = e.target.dataset.p; e.target.checked ? kept.add(p) : kept.delete(p); sync() });
+        sync();
+        import("https://keshavsoft.github.io/select-json-by-json/docs/dist/min.js").then(m => { if (typeof m.selectJson === "function") { engine = m.selectJson; $("eng").textContent = "Running the published v6 bundle."; sync() } }).catch(() => { });
+    </script>
+</body>
+
+</html>
