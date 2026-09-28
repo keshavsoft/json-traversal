@@ -1,0 +1,9 @@
+[
+    {
+        "INVOICE_NUMBER": 1001,
+        "TRANSACTION_DATE": "2026-09-24",
+        "CUSTOMER_NAME": "Alpha Global Industries",
+        "INTERNAL_AUDIT_CODE": "SEC-9912",
+        "TOTAL_TAX": 180.50
+    }
+]
