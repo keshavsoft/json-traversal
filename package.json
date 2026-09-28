@@ -1,6 +1,6 @@
 {
   "name": "json-traversal",
-  "version": "1.3.1",
+  "version": "1.4.1",
   "type": "module",
   "description": "Select a nested JSON structure using a JSON projection spec.",
   "main": "./src/index.js",
