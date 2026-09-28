@@ -1,0 +1,51 @@
+{
+  "name": "json-traversal",
+  "version": "1.2.1",
+  "type": "module",
+  "description": "Select a nested JSON structure using a JSON projection spec.",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "json-traversal": "bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "index.js",
+    "src",
+    "docs/dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node save.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "json-traversal",
+    "json-projection",
+    "filter-json",
+    "spec",
+    "tally-json"
+  ],
+  "author": "KeshavSoft",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keshavsoft/json-traversal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/keshavsoft/json-traversal/issues"
+  },
+  "homepage": "https://keshavsoft.github.io/json-traversal/",
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
+}
