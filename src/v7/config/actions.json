@@ -1,0 +1,16 @@
+{
+    "actionTypes": {
+        "visibility": {
+            "description": "Select only the fields declared by the JSON specification.",
+            "handler": "selectObject"
+        },
+        "renameKey": {
+            "description": "Recursively rename object keys using the JSON mapping.",
+            "handler": "renameKey"
+        },
+        "renameValue": {
+            "description": "Recursively rename values using the JSON mapping.",
+            "handler": "renameValue"
+        }
+    }
+}
